@@ -6,6 +6,7 @@ import { withLayout } from "src/hoc/withLayout";
 import { extractJSON } from "src/services";
 import { APP_ROUTES, LOCAL_STORAGE } from "src/utils/enums";
 import { CachedPokemons, SavedPokemon } from "src/utils/types";
+import { ShouldRender } from "src/components/shared";
 
 const MyPokemonList = () => {
   const navigate = useNavigate();
@@ -33,9 +34,10 @@ const MyPokemonList = () => {
 
   return (
     <React.Fragment>
-      {pokemons.length ? (
+      <ShouldRender check={pokemons.length > 0}>
         <MyPokemonTable pokemons={pokemons} />
-      ) : (
+      </ShouldRender>
+      <ShouldRender check={pokemons.length <= 0}>
         <div className="flex-fill d-flex flex-column align-items-center justify-content-center">
           <h4 className="mb-4">
             Seems like you havn't catched any Pokemons yet!
@@ -44,7 +46,7 @@ const MyPokemonList = () => {
             Find Pokemons
           </Button>
         </div>
-      )}
+      </ShouldRender>
     </React.Fragment>
   );
 };

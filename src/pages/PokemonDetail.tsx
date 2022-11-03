@@ -1,5 +1,4 @@
 import React from "react";
-import { Image, Spinner } from "react-bootstrap";
 import { capitalCase } from "capital-case";
 import PokemonModal from "src/components/PokemonModal";
 import { withLayout } from "src/hoc/withLayout";
@@ -8,6 +7,8 @@ import { extractJSON, saveJSON } from "src/services";
 import { LOCAL_STORAGE, NOTIFICATION_TYPE } from "src/utils/enums";
 import { CachedPokemons } from "src/utils/types";
 import { createNotification } from "src/services/notfications";
+import { LazyImage, Loader } from "src/components/shared";
+import { IMAGES } from "src/utils/constants";
 
 const PokemonDetail = () => {
   const {
@@ -34,33 +35,34 @@ const PokemonDetail = () => {
     setShowModal(false);
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const imageElement = e.target as HTMLImageElement;
+    imageElement.src = IMAGES.missingPokemon;
+  };
+
   return (
     <React.Fragment>
-      {loadingText ? (
-        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white opacity-50">
-          <div className="d-flex flex-column justify-content-center align-items-center">
-            <Spinner animation="grow" />
-            <h5 className="mt-4">{loadingText}</h5>
-          </div>
-        </div>
-      ) : null}
-      {pokemonDetail ? (
+      <Loader loaderText={loadingText || ""} loading={Boolean(loadingText)} />
+      {Boolean(pokemonDetail) && (
         <div className="w-100 d-flex flex-column align-items-center justify-content-center">
-          <h2>{capitalCase(pokemonDetail.name)}</h2>
-          <Image
-            src={pokemonDetail.sprites.other["official-artwork"].front_default}
-            alt={pokemonDetail.name}
+          <h2>{capitalCase(pokemonDetail!.name)}</h2>
+          <LazyImage
+            className="mw-100"
+            onError={handleImageError}
+            placeholderImage={IMAGES.pokemonPlaceholder}
+            src={pokemonDetail!.sprites.other["official-artwork"].front_default}
+            alt={pokemonDetail!.name}
           />
           <button
             onClick={handleCatchPokemon}
             type="button"
             className="btn btn-dark pointer mb-4"
           >
-            Catch {capitalCase(pokemonDetail.name)}
+            Catch {capitalCase(pokemonDetail!.name)}
           </button>
           <div className="mb-4">
             <h6>Type</h6>
-            {pokemonDetail.types.map((item: any) => (
+            {pokemonDetail!.types.map((item: any) => (
               <span
                 key={item.slot}
                 className="bg-info d-inline-block px-2 py-2 m-2 rounded"
@@ -71,7 +73,7 @@ const PokemonDetail = () => {
           </div>
           <div className="mb-4">
             <h6>Moves</h6>
-            {pokemonDetail.moves.map((item: any, index: number) => (
+            {pokemonDetail!.moves.map((item: any, index: number) => (
               <span
                 key={index}
                 className="bg-info d-inline-block px-2 py-2 m-2 rounded"
@@ -80,10 +82,10 @@ const PokemonDetail = () => {
               </span>
             ))}
           </div>
-          {pokemonDetail.held_items.length ? (
+          {pokemonDetail!.held_items.length ? (
             <div className="mb-4">
               <h6>Held Itmes</h6>
-              {pokemonDetail.held_items.map((item: any, index: number) => (
+              {pokemonDetail!.held_items.map((item: any, index: number) => (
                 <span
                   key={index}
                   className="bg-info d-inline-block px-2 py-2 m-2 rounded"
@@ -94,7 +96,7 @@ const PokemonDetail = () => {
             </div>
           ) : null}
         </div>
-      ) : null}
+      )}
       <PokemonModal show={showModal} onHide={savePokemonToMyList} />
     </React.Fragment>
   );

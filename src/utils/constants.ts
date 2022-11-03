@@ -1,3 +1,11 @@
+import missingPokemon from "src/assets/images/missingmon.jpg";
+import pokemonPlaceholder from "src/assets/images/placeholder_thumbnail_pokemon.png";
+
+export const IMAGES = {
+  missingPokemon,
+  pokemonPlaceholder,
+};
+
 export const HOST_ROOT = "https://pokeapi.co/api/v2/";
 
 export const OFFSET_SIZE_OPTIONS = [10, 20, 30];
