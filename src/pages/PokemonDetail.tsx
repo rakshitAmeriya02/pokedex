@@ -1,11 +1,41 @@
-import { capitalCase } from "capital-case";
+import React from "react";
 import { Image, Spinner } from "react-bootstrap";
+import { capitalCase } from "capital-case";
+import PokemonModal from "src/components/PokemonModal";
+import { withLayout } from "src/hoc/withLayout";
 import { usePokemonDetail } from "src/hooks/usePokemonDetail";
+import { extractJSON, saveJSON } from "src/services";
+import { LOCAL_STORAGE, NOTIFICATION_TYPE } from "src/utils/enums";
+import { CachedPokemons } from "src/utils/types";
+import { createNotification } from "src/services/notfications";
 
 const PokemonDetail = () => {
-  const { handleCatchPokemon, loadingText, pokemonDetail } = usePokemonDetail();
+  const {
+    handleCatchPokemon,
+    loadingText,
+    pokemonDetail,
+    showModal,
+    setShowModal,
+  } = usePokemonDetail();
+
+  const savePokemonToMyList = (nickName: string) => {
+    const pokemonsCaught: CachedPokemons =
+      extractJSON(LOCAL_STORAGE.CATCHED_POKEMONS) || {};
+    const { id, name } = pokemonDetail!;
+    const nickNames = pokemonsCaught[name] || [];
+    nickNames.push({
+      id,
+      nickName,
+      createdAt: new Date(),
+    });
+    pokemonsCaught[name] = nickNames;
+    saveJSON(LOCAL_STORAGE.CATCHED_POKEMONS, pokemonsCaught);
+    createNotification(NOTIFICATION_TYPE.SUCCESS, "Saved to Pokemon List!");
+    setShowModal(false);
+  };
+
   return (
-    <div className="p-4 d-flex flex-column min-vh-100">
+    <React.Fragment>
       {loadingText ? (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white opacity-50">
           <div className="d-flex flex-column justify-content-center align-items-center">
@@ -65,8 +95,9 @@ const PokemonDetail = () => {
           ) : null}
         </div>
       ) : null}
-    </div>
+      <PokemonModal show={showModal} onHide={savePokemonToMyList} />
+    </React.Fragment>
   );
 };
 
-export default PokemonDetail;
+export default withLayout(PokemonDetail);

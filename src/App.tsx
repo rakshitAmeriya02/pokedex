@@ -8,6 +8,7 @@ import {
 import { APP_ROUTES } from "./utils/enums";
 import Home from "src/pages/Home";
 import PokemonDetail from "src/pages/PokemonDetail";
+import MyPokemonList from "./pages/MyPokemonList";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -33,6 +34,7 @@ function App() {
             element={<Navigate to={APP_ROUTES.HOME} />}
           />
           <Route path={APP_ROUTES.HOME} element={<Home />} />
+          <Route path={APP_ROUTES.MY_LIST} element={<MyPokemonList />} />
           <Route path={APP_ROUTES.POKEMON_DETAIL} element={<PokemonDetail />} />
         </Routes>
       </Router>

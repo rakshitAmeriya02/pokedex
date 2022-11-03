@@ -1,16 +1,16 @@
 import { capitalCase } from "capital-case";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { extractJSON, saveJSON } from "src/services";
 import { createNotification } from "src/services/notfications";
 import { getPokemonDetail } from "src/utils/api";
 import { POKEMON_CATCH_SUCCESS_THRESHOLD } from "src/utils/constants";
-import { LOCAL_STORAGE, NOTIFICATION_TYPE } from "src/utils/enums";
-import { CatchedPokemon, Pokemon } from "src/utils/types";
+import { NOTIFICATION_TYPE } from "src/utils/enums";
+import { Pokemon } from "src/utils/types";
 
 export const usePokemonDetail = () => {
   const [loadingText, setLoadingText] = useState<string | null>(null);
   const [pokemonDetail, setPokemonDetail] = useState<Pokemon | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -35,17 +35,7 @@ export const usePokemonDetail = () => {
 
   const attempToCatchPokemon = () => {
     const value = Math.random();
-    if (value > POKEMON_CATCH_SUCCESS_THRESHOLD) {
-      const catchedPokemons: CatchedPokemon =
-        extractJSON(LOCAL_STORAGE.CATCHED_POKEMONS) || {};
-      const name = pokemonDetail?.name!;
-      const currentCount = catchedPokemons[name] || 0;
-      catchedPokemons[name] = currentCount + 1;
-      saveJSON(LOCAL_STORAGE.CATCHED_POKEMONS, catchedPokemons);
-      return true;
-    } else {
-      return false;
-    }
+    return value > POKEMON_CATCH_SUCCESS_THRESHOLD;
   };
 
   const catchPokemon = () => {
@@ -66,6 +56,7 @@ export const usePokemonDetail = () => {
         NOTIFICATION_TYPE.SUCCESS,
         `Caught ${capitalCase(pokemonDetail?.name!)} successfully!`
       );
+      setShowModal(true);
     } catch (error) {
       createNotification(NOTIFICATION_TYPE.ERROR, "Oops almost got him!");
     } finally {
@@ -77,5 +68,7 @@ export const usePokemonDetail = () => {
     handleCatchPokemon,
     loadingText,
     pokemonDetail,
+    showModal,
+    setShowModal,
   };
 };

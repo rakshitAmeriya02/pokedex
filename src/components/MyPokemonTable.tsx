@@ -1,38 +1,35 @@
 import { Table } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { PokemonInfo } from "src/hooks/usePokemonList";
 import { getRoute } from "src/services";
 import { APP_ROUTES } from "src/utils/enums";
+import { SavedPokemon } from "src/utils/types";
 
 interface Props {
-  offset: number;
-  results: PokemonInfo[];
+  pokemons: SavedPokemon[];
 }
 
-const PokemonTable = ({ offset, results }: Props) => {
+const MyPokemonTable = ({ pokemons }: Props) => {
   const navigate = useNavigate();
-
   const handleRowClick = (id: number) => {
     const route = getRoute(APP_ROUTES.POKEMON_DETAIL, id.toString());
     navigate(route);
   };
 
   const renderTableBody = () =>
-    results.map((info, index) => (
-      <tr key={info.url} onClick={() => handleRowClick(index + offset + 1)}>
-        <td>{index + offset + 1}</td>
+    pokemons.map((info, index) => (
+      <tr key={index} onClick={() => handleRowClick(info.id)}>
+        <td>{info.id}</td>
+        <td className="text-capitalize">{info.nickName}</td>
         <td className="text-capitalize">{info.name}</td>
-        <td className="text-capitalize">{info.ownedTotal || 0}</td>
       </tr>
     ));
-
   return (
     <Table responsive striped bordered hover>
       <thead>
         <tr>
           <th>#</th>
-          <th>Name</th>
-          <th>Owned Total</th>
+          <th>Nick Name</th>
+          <th>Type</th>
         </tr>
       </thead>
       <tbody>{renderTableBody()}</tbody>
@@ -40,4 +37,4 @@ const PokemonTable = ({ offset, results }: Props) => {
   );
 };
 
-export default PokemonTable;
+export default MyPokemonTable;

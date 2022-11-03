@@ -4,7 +4,7 @@ import { extractJSON } from "src/services";
 import { createNotification } from "src/services/notfications";
 import { getPokemons } from "src/utils/api";
 import { LOCAL_STORAGE, NOTIFICATION_TYPE } from "src/utils/enums";
-import { CatchedPokemon } from "src/utils/types";
+import { CachedPokemons } from "src/utils/types";
 
 export interface PokemonInfo {
   name: string;
@@ -52,12 +52,12 @@ export const usePokemonList = () => {
     const fetchPokemons = async () => {
       setLoading(true);
       try {
-        const catchedPokemons: CatchedPokemon =
+        const pokemonsCaught: CachedPokemons =
           extractJSON(LOCAL_STORAGE.CATCHED_POKEMONS) || {};
         const result = await getPokemons(limit, offset);
         result.results = result.results.map((item) => ({
           ...item,
-          ownedTotal: catchedPokemons[item.name],
+          ownedTotal: pokemonsCaught[item.name]?.length,
         }));
         setFetchedResults(result);
       } catch (error) {

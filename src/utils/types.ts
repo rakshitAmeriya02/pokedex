@@ -59,6 +59,17 @@ export interface Pokemon {
   weight: number;
 }
 
-export interface CatchedPokemon {
-  [name: string]: number;
+export interface CachedPokemons {
+  [name: string]: {
+    id: number;
+    nickName: string;
+    createdAt: Date;
+  }[];
+}
+
+export interface SavedPokemon {
+  id: number;
+  createdAt: Date;
+  name: string;
+  nickName: string;
 }
