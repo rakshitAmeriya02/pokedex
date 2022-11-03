@@ -1,41 +1,25 @@
-import React, { useMemo } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "react-bootstrap";
 import MyPokemonTable from "src/components/MyPokemonTable";
 import { withLayout } from "src/hoc/withLayout";
-import { extractJSON } from "src/services";
-import { APP_ROUTES, LOCAL_STORAGE } from "src/utils/enums";
-import { CachedPokemons, SavedPokemon } from "src/utils/types";
+import { APP_ROUTES } from "src/utils/enums";
 import { ShouldRender } from "src/components/shared";
+import {
+  MyPokemonListContext,
+  MyPokemonListProvider,
+} from "src/context/MyPokemonListContext";
 
 const MyPokemonList = () => {
   const navigate = useNavigate();
-  const pokemons = useMemo(() => {
-    const pokemonsCaught: CachedPokemons =
-      extractJSON(LOCAL_STORAGE.CATCHED_POKEMONS) || {};
-    const savedPokemons = Object.entries(pokemonsCaught).reduce(
-      (arr, [name, props]) => {
-        props.forEach(({ createdAt, id, nickName }) => {
-          arr.push({
-            createdAt,
-            id,
-            name,
-            nickName,
-          });
-        });
-        return arr;
-      },
-      [] as SavedPokemon[]
-    );
-    return savedPokemons;
-  }, []);
+  const { pokemons, releasePokemon } = useContext(MyPokemonListContext);
 
   const handleFindPokemons = () => navigate(APP_ROUTES.HOME);
 
   return (
     <React.Fragment>
       <ShouldRender check={pokemons.length > 0}>
-        <MyPokemonTable pokemons={pokemons} />
+        <MyPokemonTable pokemons={pokemons} releasePokemon={releasePokemon} />
       </ShouldRender>
       <ShouldRender check={pokemons.length <= 0}>
         <div className="flex-fill d-flex flex-column align-items-center justify-content-center">
@@ -51,4 +35,12 @@ const MyPokemonList = () => {
   );
 };
 
-export default withLayout(MyPokemonList);
+const MyPokemonListWarpper = () => {
+  return (
+    <MyPokemonListProvider>
+      <MyPokemonList />
+    </MyPokemonListProvider>
+  );
+};
+
+export default withLayout(MyPokemonListWarpper);

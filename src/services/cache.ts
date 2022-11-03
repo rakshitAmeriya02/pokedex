@@ -5,7 +5,7 @@ export const removeItem = (key: string) => localStorage.removeItem(key);
 const setItem = (key: string, value: string) =>
   localStorage.setItem(key, value);
 
-const cloneJSON = (value: string) => {
+export const cloneJSON = (value: string) => {
   try {
     return JSON.parse(value);
   } catch {
