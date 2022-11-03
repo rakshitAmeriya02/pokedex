@@ -12,7 +12,7 @@ const PokemonModal = ({ show, onHide }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setNickName(e.target.value);
   return (
-    <Modal show={show} size="lg" centered>
+    <Modal show={show} centered>
       <Modal.Header>
         <Modal.Title>Give Nickname</Modal.Title>
       </Modal.Header>

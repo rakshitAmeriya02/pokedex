@@ -32,8 +32,9 @@ const MyPokemonTable = ({ pokemons, releasePokemon }: Props) => {
         <td className="text-capitalize">{info.name}</td>
         <td className="text-capitalize">
           <Button
-            variant="dark"
+            className="w-100"
             onClick={(e) => handleReleasePokemon(e, index)}
+            variant="link"
           >
             Release
           </Button>
@@ -46,7 +47,7 @@ const MyPokemonTable = ({ pokemons, releasePokemon }: Props) => {
         <tr>
           <th>#</th>
           <th>Nick Name</th>
-          <th>Type</th>
+          <th>Name</th>
         </tr>
       </thead>
       <tbody>{renderTableBody()}</tbody>
