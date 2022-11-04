@@ -1,4 +1,4 @@
-import { fireEvent, getByText, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { IMAGES } from "src/utils/constants";
 import { SavedPokemon } from "src/utils/types";
 
