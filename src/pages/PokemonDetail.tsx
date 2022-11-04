@@ -7,7 +7,7 @@ import { extractJSON, saveJSON } from "src/services";
 import { LOCAL_STORAGE, NOTIFICATION_TYPE } from "src/utils/enums";
 import { CachedPokemons } from "src/utils/types";
 import { createNotification } from "src/services/notfications";
-import { LazyImage, Loader } from "src/components/shared";
+import { LazyImage, Loader, ShouldRender } from "src/components/shared";
 import { IMAGES } from "src/utils/constants";
 
 const PokemonDetail = () => {
@@ -60,29 +60,33 @@ const PokemonDetail = () => {
           >
             Catch {capitalCase(pokemonDetail!.name)}
           </button>
-          <div className="mb-4">
-            <h6>Type</h6>
-            {pokemonDetail!.types.map((item: any) => (
-              <span
-                key={item.slot}
-                className="bg-info d-inline-block px-2 py-2 m-2 rounded"
-              >
-                {capitalCase(item.type.name)}
-              </span>
-            ))}
-          </div>
-          <div className="mb-4">
-            <h6>Moves</h6>
-            {pokemonDetail!.moves.map((item: any, index: number) => (
-              <span
-                key={index}
-                className="bg-info d-inline-block px-2 py-2 m-2 rounded"
-              >
-                {capitalCase(item.move.name)}
-              </span>
-            ))}
-          </div>
-          {pokemonDetail!.held_items.length ? (
+          <ShouldRender check={pokemonDetail!.types.length > 0}>
+            <div className="mb-4">
+              <h6>Type</h6>
+              {pokemonDetail!.types.map((item: any) => (
+                <span
+                  key={item.slot}
+                  className="bg-info d-inline-block px-2 py-2 m-2 rounded"
+                >
+                  {capitalCase(item.type.name)}
+                </span>
+              ))}
+            </div>
+          </ShouldRender>
+          <ShouldRender check={pokemonDetail!.moves.length > 0}>
+            <div className="mb-4">
+              <h6>Moves</h6>
+              {pokemonDetail!.moves.map((item: any, index: number) => (
+                <span
+                  key={index}
+                  className="bg-info d-inline-block px-2 py-2 m-2 rounded"
+                >
+                  {capitalCase(item.move.name)}
+                </span>
+              ))}
+            </div>
+          </ShouldRender>
+          <ShouldRender check={pokemonDetail!.held_items.length > 0}>
             <div className="mb-4">
               <h6>Held Itmes</h6>
               {pokemonDetail!.held_items.map((item: any, index: number) => (
@@ -94,7 +98,7 @@ const PokemonDetail = () => {
                 </span>
               ))}
             </div>
-          ) : null}
+          </ShouldRender>
         </div>
       )}
       <PokemonModal show={showModal} onHide={savePokemonToMyList} />
