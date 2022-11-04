@@ -28,6 +28,7 @@ const PokemonDetail = () => {
       id,
       nickName,
       createdAt: new Date(),
+      image: pokemonDetail!.sprites.other["official-artwork"].front_default,
     });
     pokemonsCaught[name] = nickNames;
     saveJSON(LOCAL_STORAGE.CATCHED_POKEMONS, pokemonsCaught);

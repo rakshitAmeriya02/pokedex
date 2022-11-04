@@ -63,6 +63,7 @@ export interface CachedPokemons {
   [name: string]: {
     id: number;
     nickName: string;
+    image: string;
     createdAt: Date;
   }[];
 }
@@ -72,4 +73,5 @@ export interface SavedPokemon {
   createdAt: Date;
   name: string;
   nickName: string;
+  image: string;
 }

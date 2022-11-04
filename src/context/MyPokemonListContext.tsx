@@ -8,12 +8,13 @@ const getIninitalValue = () => {
     extractJSON(LOCAL_STORAGE.CATCHED_POKEMONS) || {};
   const savedPokemons = Object.entries(pokemonsCaught).reduce(
     (arr, [name, props]) => {
-      props.forEach(({ createdAt, id, nickName }) => {
+      props.forEach(({ createdAt, id, nickName, image }) => {
         arr.push({
           createdAt,
           id,
           name,
           nickName,
+          image,
         });
       });
       return arr;
