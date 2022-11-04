@@ -19,6 +19,7 @@ const PokemonModal = ({ show, onHide }: Props) => {
       <Modal.Body>
         <Form.Control
           type="input"
+          name="nickName"
           value={nickName}
           onChange={handleChange}
           placeholder="e.g., zemo"

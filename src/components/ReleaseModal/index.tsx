@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
 import { IMAGES } from "src/utils/constants";
 import { SavedPokemon } from "src/utils/types";
-import { LazyImage } from "./shared";
+import { LazyImage } from "src/components/shared";
 
 interface Props {
   confirmationHandler: (confirm: boolean) => void;

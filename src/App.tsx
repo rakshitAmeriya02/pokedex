@@ -11,6 +11,7 @@ import PokemonDetail from "src/pages/PokemonDetail";
 import MyPokemonList from "./pages/MyPokemonList";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import PageNotFound from "./pages/PageNotFound";
 
 interface pokemonInfo {
   name: string;
@@ -29,6 +30,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+          <Route path="*" element={<PageNotFound />} />
           <Route
             path={APP_ROUTES.ROOT}
             element={<Navigate to={APP_ROUTES.HOME} />}
